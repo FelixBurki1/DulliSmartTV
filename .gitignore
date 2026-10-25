@@ -1,0 +1,4 @@
+app/.buildResult/
+*.wgt
+.claude/
+__pycache__/

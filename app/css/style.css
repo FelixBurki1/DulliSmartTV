@@ -1,0 +1,346 @@
+/*
+ * Bewusst konservativ fuer den Browser von Tizen 2.4 (Samsung 2016):
+ * keine CSS-Variablen, kein Grid, kein Flexbox, kein backdrop-filter.
+ * Animiert werden nur transform und opacity.
+ */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: "SamsungOne", "Samsung Sans", Arial, Helvetica, sans-serif;
+}
+
+#stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+#bg, #shade, .screen {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+}
+
+#bg {
+    background-color: #111;
+    background-size: cover;
+    background-position: center center;
+}
+
+#shade {
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.light #shade {
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.35) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.35) 100%);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- Uhr ---------- */
+
+#clock {
+    position: absolute;
+    left: 120px;
+    top: 90px;
+}
+
+#time {
+    font-size: 150px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -2px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+#date {
+    margin-top: 14px;
+    font-size: 40px;
+    opacity: 0.85;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.light #home {
+    color: #1a1a1a;
+}
+
+.light #time, .light #date {
+    text-shadow: none;
+}
+
+/* ---------- Kacheln ---------- */
+
+#tiles {
+    position: absolute;
+    overflow: hidden;
+}
+
+#tiles-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-transition: -webkit-transform 0.2s ease-out;
+    transition: transform 0.2s ease-out;
+}
+
+.tile {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    -webkit-transition: -webkit-transform 0.15s ease-out;
+    transition: transform 0.15s ease-out;
+}
+
+.light .tile {
+    background: rgba(0, 0, 0, 0.08);
+    color: #1a1a1a;
+}
+
+.tile .badge {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+}
+
+.tile .label {
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tile.focused, .light .tile.focused {
+    background: #fff;
+    color: #111;
+    -webkit-transform: scale(1.08);
+    transform: scale(1.08);
+}
+
+/* Dock: eine Reihe unten */
+
+/* Genau 6 Kacheln breit (6 x 268 - 28 + 2 x 20 Rand fuer die Vergroesserung). */
+#tiles.dock {
+    left: 130px;
+    top: 690px;
+    width: 1620px;
+    height: 300px;
+}
+
+#tiles.dock #tiles-inner {
+    top: 40px;
+    left: 20px;
+    white-space: nowrap;
+}
+
+#tiles.dock .tile {
+    display: inline-block;
+    vertical-align: top;
+    width: 240px;
+    height: 200px;
+    margin-right: 28px;
+    border-radius: 24px;
+}
+
+#tiles.dock .badge {
+    left: 24px;
+    top: 24px;
+    width: 76px;
+    height: 76px;
+    border-radius: 20px;
+    font-size: 42px;
+    line-height: 76px;
+}
+
+#tiles.dock .label {
+    left: 24px;
+    right: 16px;
+    bottom: 24px;
+    font-size: 28px;
+}
+
+/* Liste: eine Spalte links */
+
+/* Genau 5 Zeilen hoch, damit keine angeschnittene Zeile sichtbar ist. */
+#tiles.list {
+    left: 100px;
+    top: 380px;
+    width: 820px;
+    height: 568px;
+}
+
+#tiles.list #tiles-inner {
+    left: 20px;
+    top: 16px;
+}
+
+#tiles.list .tile {
+    display: block;
+    width: 720px;
+    height: 96px;
+    margin-bottom: 16px;
+    border-radius: 22px;
+}
+
+#tiles.list .tile.focused {
+    -webkit-transform: scale(1.04);
+    transform: scale(1.04);
+}
+
+#tiles.list .badge {
+    left: 18px;
+    top: 18px;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    font-size: 32px;
+    line-height: 60px;
+}
+
+#tiles.list .label {
+    left: 100px;
+    right: 24px;
+    top: 0;
+    font-size: 36px;
+    line-height: 96px;
+}
+
+/* ---------- Einstellungen ---------- */
+
+#panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 900px;
+    height: 1080px;
+    background: rgba(12, 12, 16, 0.9);
+    color: #fff;
+}
+
+#panel-title {
+    margin: 0;
+    padding: 80px 80px 30px 80px;
+    font-size: 54px;
+    font-weight: normal;
+}
+
+#panel-list {
+    position: absolute;
+    left: 60px;
+    right: 60px;
+    top: 200px;
+    height: 760px;
+    overflow: hidden;
+}
+
+.row {
+    position: relative;
+    height: 76px;
+    margin-bottom: 8px;
+    padding: 0 24px;
+    border-radius: 16px;
+    font-size: 32px;
+    line-height: 76px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.row.focused {
+    background: #fff;
+    color: #111;
+}
+
+.row.moving {
+    background: #ffd54a;
+    color: #111;
+}
+
+.row.disabled {
+    opacity: 0.55;
+}
+
+.row .name {
+    display: inline-block;
+    max-width: 440px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+}
+
+.row .value {
+    position: absolute;
+    right: 24px;
+    top: 0;
+    opacity: 0.8;
+}
+
+.row .buttons {
+    position: absolute;
+    right: 14px;
+    top: 0;
+}
+
+.row .btn {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 0 20px;
+    height: 52px;
+    line-height: 52px;
+    border-radius: 12px;
+    font-size: 26px;
+    vertical-align: middle;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.row.focused .btn.active {
+    background: #111;
+    color: #fff;
+}
+
+.more {
+    font-size: 26px;
+    opacity: 0.6;
+    padding-left: 24px;
+}
+
+#panel-hint {
+    position: absolute;
+    left: 84px;
+    right: 60px;
+    bottom: 50px;
+    font-size: 26px;
+    opacity: 0.6;
+}
+
+/* ---------- Hinweis ---------- */
+
+#toast {
+    position: absolute;
+    left: 460px;
+    width: 1000px;
+    bottom: 60px;
+    padding: 24px 32px;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+}
